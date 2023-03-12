@@ -7,6 +7,8 @@ backupDir="${dbDir}backups/"
 noBackupMessage="No backup files found"
 emptyDbMessage="No added members in db"
 
+#checking functions 
+
 checkDir() {
     if [ ! -d $1 ]
     then 
@@ -39,6 +41,33 @@ validation() {
     fi
 }
 
+#help 
+
+help() {
+    echo
+    echo "Script works with database."
+    echo "db.sh [command] [optional param]"
+    echo
+    echo "List of commands:"
+    echo 
+    echo "add"
+    echo "Adds a new line to the user.db. Username (latin letters only) + role"
+    echo
+    echo "backup"
+    echo "Create backup - file with copy of current users.db"
+    echo
+    echo "restore"
+    echo "Replace users.db by latest backup if it exists"
+    echo
+    echo "find"
+    echo "Search and print user by provided name"
+    echo
+    echo "list"
+    echo "Show records from users.db. In case of --inverse param results are showed in opposit order" 
+}
+
+# user interactions 
+
 add() {
     checkDbFile
     while true
@@ -56,25 +85,6 @@ add() {
     done
     echo "${username}, ${role}" >> $dbPath 
     echo "User ${username} with role ${role} was succesfully added in the database."    
-}
-
-backup() {
-    checkDbFile
-    checkDir $backupDir 0
-    cat $dbPath > "${backupDir}%$(date +%F)%-${dbName}.backup"
-    echo "Database backup was successfully created $(date +%F)"
-}
-
-restore() {
-    checkDbFile
-    checkDir $backupDir
-    latest=$(ls $backupDir -At | head -1)
-    if [ latest ]
-    then
-        cat $backupDir$latest > $dbPath
-        echo "Database was restored with ${latest}"
-     else echo $noBackupMessage
-     fi
 }
 
 list() {
@@ -101,27 +111,25 @@ find(){
     fi
 }
     
-help() {
-    echo
-    echo "Script works with database."
-    echo "db.sh [command] [optional param]"
-    echo
-    echo "List of commands:"
-    echo 
-    echo "add"
-    echo "Adds a new line to the user.db. Username (latin letters only) + role"
-    echo
-    echo "backup"
-    echo "Create backup - file with copy of current users.db"
-    echo
-    echo "restore"
-    echo "Replace users.db by latest backup if it exists"
-    echo
-    echo "find"
-    echo "Search and print user by provided name"
-    echo
-    echo "list"
-    echo "Show records from users.db. In case of --inverse param results are showed in opposit order" 
+# backup actions
+
+backup() {
+    checkDbFile
+    checkDir $backupDir 0
+    cat $dbPath > "${backupDir}%$(date +%F)%-${dbName}.backup"
+    echo "Database backup was successfully created $(date +%F)"
+}
+
+restore() {
+    checkDbFile
+    checkDir $backupDir
+    latest=$(ls $backupDir -At | head -1)
+    if [ latest ]
+    then
+        cat $backupDir$latest > $dbPath
+        echo "Database was restored with ${latest}"
+     else echo $noBackupMessage
+     fi
 }
 
 case $1 in
