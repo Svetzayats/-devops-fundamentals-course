@@ -94,7 +94,7 @@ then
 fi
 
 # update branch, poll and config 
-jq --arg branchName "$branch" --argjson poll "$poll_for_source_changes" --arg config "[{\"name\":\"BUILD_CONFIGURATION\",\"value\":\"$configuration\",\"type\":\"PLAINTEXT\"}]" '.pipeline.stages[0].actions[0].configuration.Branch = $branchName | .pipeline.stages[0].actions[0].configuration.PollForSourceChanges = $poll | .pipeline.stages[].actions[] |= . + {"configuration": {"EnvironmentVariables": $config}}' "${directory}/${new_filename}" > "${directory}/${new_filename}.tmp" 
+jq --arg branchName "$branch" --argjson poll "$poll_for_source_changes" --arg config "[{\"name\":\"BUILD_CONFIGURATION\",\"value\":\"$configuration\",\"type\":\"PLAINTEXT\"}]" '.pipeline.stages[0].actions[0].configuration.Branch = $branchName | .pipeline.stages[0].actions[0].configuration.PollForSourceChanges = $poll | .pipeline.stages[1].actions[0].configuration.EnvironmentVariables = $config |  .pipeline.stages[3].actions[0].configuration.EnvironmentVariables = $config' "${directory}/${new_filename}" > "${directory}/${new_filename}.tmp" 
 mv "${directory}/${new_filename}.tmp" "${directory}/${new_filename}"
 
 # optionally update owner

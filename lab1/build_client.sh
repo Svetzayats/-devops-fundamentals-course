@@ -9,10 +9,10 @@ ENV_CONFIGURATION=
 
 if [ -z "$1" ] 
 then
-    echo "no env variable, development"
+    echo "no env variable is provided"
     true
 else 
-    echo "no env variable, production"
+    echo "env variable from options $1"
     ENV_CONFIGURATION=$1
 fi 
 
@@ -26,8 +26,13 @@ fi
 
 echo "install project"
 
-cd $project_folder && npm i && ng build --output-path="$build_folder" --configuration="$ENV_CONFIGURATION" 
+cd $project_folder 
+
+echo "installing project..."
+npm i 
+
+echo "building project to ${build_folder}"
+ng build --output-path="$build_folder" --configuration="$ENV_CONFIGURATION" 
 
 echo "zip build"
-
 7z a -tzip $client_build $output_path/*
