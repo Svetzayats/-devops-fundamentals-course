@@ -7,11 +7,11 @@ backupDir="${dbDir}backups/"
 noBackupMessage="No backup files found"
 emptyDbMessage="No added members in db"
 
-#checking functions 
+#checking functions
 
 checkDir() {
     if [ ! -d $1 ]
-    then 
+    then
         if [ $2 ]
         then mkdir $1
         else echo $noBackupMessage; exit
@@ -21,7 +21,7 @@ checkDir() {
 
 checkDbFile() {
     if [ ! -f $dbPath ]
-    then 
+    then
         echo "There is no database yet. Create datadase? :"
         select answer in "Yes" "No"; do
             case $answer in
@@ -35,13 +35,13 @@ checkDbFile() {
 validation() {
     if [[ $1 =~ ^[A-Za-z_]+$ ]]
     then return 0;
-    else 
+    else
         echo "$2 must contains lattin letters only. Please try again."
         return 1;
     fi
 }
 
-#help 
+#help
 
 help() {
     echo
@@ -49,7 +49,7 @@ help() {
     echo "db.sh [command] [optional param]"
     echo
     echo "List of commands:"
-    echo 
+    echo
     echo "add"
     echo "Adds a new line to the user.db. Username (latin letters only) + role"
     echo
@@ -63,10 +63,10 @@ help() {
     echo "Search and print user by provided name"
     echo
     echo "list"
-    echo "Show records from users.db. In case of --inverse param results are showed in opposit order" 
+    echo "Show records from users.db. In case of --inverse param results are showed in opposit order"
 }
 
-# user interactions 
+# user interactions
 
 add() {
     checkDbFile
@@ -83,13 +83,13 @@ add() {
         validation $role "Role"
         if [[ $? == 0  ]]; then break; fi
     done
-    echo "${username}, ${role}" >> $dbPath 
-    echo "User ${username} with role ${role} was succesfully added in the database."    
+    echo "${username}, ${role}" >> $dbPath
+    echo "User ${username} with role ${role} was succesfully added in the database."
 }
 
 list() {
     checkDbFile
-    if [ -s $dbPath ] 
+    if [ -s $dbPath ]
     then
     	if [[ $1 == --inverse ]]
 	then cat -n $dbPath | tac
@@ -97,7 +97,7 @@ list() {
 	fi
     else echo $emptyDbMessage
     fi
-    
+
 }
 
 find(){
@@ -106,11 +106,11 @@ find(){
     if [[ -z $result ]]
     then
         echo "User not found"
-    else 
+    else
         echo $result
     fi
 }
-    
+
 # backup actions
 
 backup() {
